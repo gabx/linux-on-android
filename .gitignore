@@ -1,0 +1,20 @@
+# Termux / proot artifacts — jamais commités
+*.tar.xz
+*.tar.gz
+rootfs/
+.cache/
+
+# Logs
+*.log
+logs/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Editors
+.vscode/
+.idea/
+*.swp
+*~
+.nvim.lua
