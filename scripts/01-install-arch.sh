@@ -28,15 +28,17 @@ require_cmd proot-distro
 
 # --- idempotency check --------------------------------------------------------
 
-# `proot-distro list --installed` prints one line per installed distro in the
-# form "  * <name>" (two spaces, asterisk, space, name).
-#
-# IMPORTANT: the grep is the condition of an `if` statement. In bash, set -e
-# does NOT fire on the condition of an if/while/until — the shell uses the
-# exit code itself to branch, so a non-matching grep (exit 1) just takes the
-# else branch instead of aborting the script. This is the correct way to test
-# a command that might return non-zero without wanting to abort.
-if proot-distro list --installed | grep --quiet '  \* archlinux'; then
+# We test the filesystem directly rather than parsing proot-distro output.
+# Reasons:
+#   1. CLI output format (flags, text, ANSI codes) can change between
+#      proot-distro versions; a file path is a stable contract.
+#   2. We test /etc/os-release specifically, not just the directory: proot-distro
+#      creates the rootfs directory before extraction begins, so the directory
+#      alone can exist in a half-installed state. os-release is written by the
+#      Arch tarball itself and is absent until extraction completes successfully.
+ARCH_ROOTFS="${PREFIX}/var/lib/proot-distro/installed-rootfs/archlinux"
+
+if [[ -f "${ARCH_ROOTFS}/etc/os-release" ]]; then
     log_info "Arch Linux rootfs is already installed. Nothing to do."
     exit 0
 fi
