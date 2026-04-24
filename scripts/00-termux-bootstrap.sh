@@ -52,11 +52,10 @@ pkg install -y x11-repo \
 # pkg install -y is naturally idempotent: already-installed packages are
 # reported as up-to-date and skipped without error, so re-running this
 # script on a partially provisioned device is safe.
-log_info "Installing proot-distro, termux-x11-nightly, pulseaudio, git..."
+log_info "Installing proot-distro, termux-x11-nightly, git..."
 pkg install -y \
     proot-distro \
     termux-x11-nightly \
-    pulseaudio \
     git \
     || die "Package installation failed. Check network or Termux repository settings."
 
