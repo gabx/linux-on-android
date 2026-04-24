@@ -65,16 +65,32 @@ pacman-key --init
 # package. Also safe to rerun: it only imports keys not already present.
 pacman-key --populate archlinuxarm
 
-# Force a fresh sync of all package databases. -Syy forces re-download even
-# if the local db is considered up to date — important on a fresh rootfs
-# where the cached db timestamps are meaningless.
+# Force a fresh sync of all package databases. -Syy re-downloads even if the
+# local db is considered up to date — essential on a fresh rootfs where cached
+# db timestamps are meaningless.
 pacman -Syy
 
-# Full system upgrade. --noconfirm suppresses all interactive prompts.
-pacman -Syu --noconfirm
+# Upgrade the keyrings first, as their own isolated step. A weeks-old rootfs
+# may carry outdated signing keys; if we run the full upgrade before updating
+# them, pacman will fail signature checks on packages signed with newer keys.
+pacman -S --needed --noconfirm archlinux-keyring archlinuxarm-keyring
 
-# Install base-devel. --needed skips packages already installed, making
-# this call idempotent.
+# Full system upgrade with retry for transient mirror desync.
+# On a rolling-release distro, the package DB and the mirror's file pool can
+# briefly diverge: the DB lists version X+1 but the mirror still serves X.
+# A fresh rootfs that lags by weeks is especially prone to this. The retry
+# re-syncs the DB so pacman gets fresh URLs before the second attempt.
+# Note: -Syyu (double y) forces a DB re-download even if pacman thinks the
+# local copy is current, shrinking the sync-to-fetch window where rotation
+# can happen.
+if ! pacman -Syyu --noconfirm; then
+    echo ">>> First upgrade attempt hit mirror desync. Re-syncing and retrying..."
+    pacman -Syy
+    pacman -Syyu --noconfirm
+fi
+
+# Install base-devel after the system is in a fully upgraded, stable state.
+# --needed skips packages already installed, making this call idempotent.
 pacman -S --needed --noconfirm base-devel
 
 # Write the sentinel file. Its presence tells this script on the next run
