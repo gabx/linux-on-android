@@ -105,13 +105,6 @@ set -euo pipefail
 
 export DISPLAY=:0
 
-# glycin is GTK's modern sandboxed image loader; it uses bubblewrap + seccomp
-# to isolate image-decoding processes. Neither nests inside proot's userspace
-# syscall interception layer, so glycin's worker exits with status 1 and GTK
-# aborts when it cannot load even the fallback "image-missing" icon.
-# The legacy gdk-pixbuf loader has no sandboxing and works fine inside proot.
-export GDK_PIXBUF_NO_GLYCIN=1
-
 # dbus-launch provides the D-Bus session bus that XFCE components use to talk
 # to each other (panel plugins, power manager, settings daemon, etc.). Without
 # it, those components start but cannot communicate and XFCE behaves erratically.
