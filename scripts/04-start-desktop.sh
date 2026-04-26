@@ -105,12 +105,15 @@ set -euo pipefail
 
 export DISPLAY=:0
 
-# dbus-launch provides the D-Bus session bus that XFCE components use to talk
-# to each other (panel plugins, power manager, settings daemon, etc.). Without
-# it, those components start but cannot communicate and XFCE behaves erratically.
-# --exit-with-session ties the dbus-daemon lifetime to startxfce4: when the
-# XFCE session ends, dbus-daemon exits automatically instead of lingering.
-dbus-launch --exit-with-session startxfce4
+# dbus-run-session starts a private D-Bus session bus, waits until the daemon
+# is ready, exports DBUS_SESSION_BUS_ADDRESS into the environment, then execs
+# the given command. When startxfce4 exits, the bus daemon exits with it.
+# dbus-launch (the legacy alternative) is fragile without systemd: it spawns
+# the daemon but does not guarantee readiness before exec-ing the child, and
+# in proot the socket path it chooses is sometimes unreachable by child
+# processes — producing the silent "unable to connect to D-Bus" failures.
+# -- separates dbus-run-session flags from the command to run.
+dbus-run-session -- startxfce4
 GUEST_SCRIPT
 # === GUEST block ends ===
 
