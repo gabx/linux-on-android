@@ -28,6 +28,7 @@ Arch Linux + XFCE4 on Android via Termux (F-Droid) + proot-distro + termux-x11.
 
 ```
 linux-on-android/
+├── Makefile
 ├── README.md
 ├── LICENSE
 ├── .editorconfig
@@ -88,6 +89,10 @@ linux-on-android/
 
 8. **Wait 30–60 seconds**, then switch to the Termux:X11 app.
 
+> **Tip:** each `bash scripts/NN-*.sh` invocation has an equivalent
+> `make` target. Run `make help` for the list. Functionally identical;
+> use whichever you prefer.
+
 For interaction quirks (Trackpad input model) and other gotchas,
 see [docs/troubleshooting.md](docs/troubleshooting.md).
 
@@ -111,7 +116,7 @@ see [docs/troubleshooting.md](docs/troubleshooting.md).
 - [x] `03-xfce4-install.sh` — XFCE4 + deps (HOST → GUEST)
 - [x] `04-start-desktop.sh` — launch termux-x11 + XFCE4 session (HOST)
 - [x] `docs/troubleshooting.md` — symptom/cause/fix reference
-- [ ] `Makefile` — wrap everything with tidy targets (optional)
+- [x] `Makefile` — wrap everything with tidy targets
 
 ## License
 
