@@ -20,6 +20,7 @@ set -euo pipefail
 # like "../lib/common.sh" are relative to $PWD, not to the script itself.
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
+# shellcheck source=lib/common.sh
 source "${SCRIPT_DIR}/lib/common.sh"
 
 # --- guard --------------------------------------------------------------------

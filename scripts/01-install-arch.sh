@@ -13,6 +13,7 @@ set -euo pipefail
 # to an absolute path so lib/common.sh is always found, regardless of $PWD.
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
+# shellcheck source=lib/common.sh
 source "${SCRIPT_DIR}/lib/common.sh"
 
 # --- guard --------------------------------------------------------------------
