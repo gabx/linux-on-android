@@ -105,6 +105,7 @@ see [docs/troubleshooting.md](docs/troubleshooting.md).
 - Multiple proots + scrcpy + XFCE can saturate RAM on Pixel 7a
   (Android Low Memory Killer).
 - See `docs/troubleshooting.md` for symptoms and fixes.
+- See `docs/known-issues.md` for open questions and future work directions.
 
 ## Status
 
