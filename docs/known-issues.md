@@ -42,6 +42,16 @@ release: https://github.com/gabx/linux-on-android/releases/tag/v1.0.
 `scripts/02b-pin-gdk-pixbuf.sh` downloads it automatically with
 SHA256 verification. The user no longer has any manual download step.
 
+**Long-term outlook (verified April 2026):** the underlying
+incompatibility — glycin uses bubblewrap, which requires kernel user
+namespaces; proot does not implement kernel namespaces by design — is
+architectural, not a bug. As of the GTK 2026 hackfest, upstream is
+doubling down on glycin: gdk-pixbuf 2.44.5 ships glycin-based loaders
+even for legacy XPM/XBM formats, and the built-in loaders have been
+removed by default on Linux. The same symptom is reproduced in Debian
+under proot (see termux/termux-packages#28421, Feb 2026). Pinning
+gdk-pixbuf2-2.42.12-2 is expected to remain necessary indefinitely.
+
 ---
 
 ### 3. Termux:X11 trackpad input model is unusual
