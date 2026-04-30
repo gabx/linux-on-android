@@ -69,25 +69,20 @@ linux-on-android/
    bash scripts/02-arch-provision.sh
    ```
 
-4. **Download the pinned gdk-pixbuf2 package:**
-   `gdk-pixbuf2-2.42.12-2-aarch64.pkg.tar.xz` from
-   https://mirror.math.princeton.edu/pub/manjaro/arm-testing/extra/aarch64/
-   Save it to `~/` in Termux.
-
-5. **Continue:**
+4. **Continue:**
    ```bash
-   bash scripts/02b-pin-gdk-pixbuf.sh
+   bash scripts/02b-pin-gdk-pixbuf.sh   # auto-downloads gdk-pixbuf2 from the v1.0 release
    bash scripts/03-xfce4-install.sh
    ```
 
-6. **Open the Termux:X11 Android app** (black screen with cursor — leave it open).
+5. **Open the Termux:X11 Android app** (black screen with cursor — leave it open).
 
-7. **In Termux:**
+6. **In Termux:**
    ```bash
    bash scripts/04-start-desktop.sh
    ```
 
-8. **Wait 30–60 seconds**, then switch to the Termux:X11 app.
+7. **Wait 30–60 seconds**, then switch to the Termux:X11 app.
 
 > **Tip:** each `bash scripts/NN-*.sh` invocation has an equivalent
 > `make` target. Run `make help` for the list. Functionally identical;
