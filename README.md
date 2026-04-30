@@ -2,7 +2,10 @@
 
 Arch Linux + XFCE4 on Android via Termux (F-Droid) + proot-distro + termux-x11.
 
-**Target device:** Pixel 7a (aarch64), Android 14+.
+**Tested device:** Pixel 7a (aarch64), Android 14+.
+**Likely compatible** (untested): Pixel 6 family and later (aarch64, Android 14+).
+Devices with 6 GB RAM (e.g. Pixel 6a) may hit OOM more easily under
+load — see [docs/known-issues.md](docs/known-issues.md) entry 4.
 **Root:** Magisk supported but NOT required.
 
 ## Stack
