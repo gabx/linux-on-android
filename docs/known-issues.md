@@ -29,26 +29,18 @@ the DPI override before launching the session?
 
 ---
 
-### 2. Glycin package source is fragile
+### 2. Glycin package source — RESOLVED in v1.0
 
-**Status:** Functional but fragile, needs a more robust source.
+**Status:** Resolved.
 
-`scripts/02b-pin-gdk-pixbuf.sh` requires the user to manually download
-`gdk-pixbuf2-2.42.12-2-aarch64.pkg.tar.xz` from a third-party mirror
-(currently the Princeton mirror of Manjaro ARM:
-https://mirror.math.princeton.edu/pub/manjaro/arm-testing/extra/aarch64/).
+Earlier versions required the user to manually download
+`gdk-pixbuf2-2.42.12-2-aarch64.pkg.tar.xz` from a third-party Manjaro
+ARM mirror, which was fragile (mirrors rotate old packages out).
 
-If that mirror disappears or rotates the package out, the install
-procedure breaks and a new user cannot complete the setup.
-
-**Idea (preferred):** host the `.pkg.tar.xz` as a release asset on this
-repository's GitHub releases. Update `02b` to download from
-`https://github.com/gabx/linux-on-android/releases/...` with a SHA256
-verification step. Self-contained and robust to upstream mirror changes.
-
-**Idea (more involved):** compile gdk-pixbuf2 2.42.12 from source via
-`makepkg` in the guest. Reproducible, but adds 20–40 minutes of
-compilation to the install procedure.
+As of v1.0, the package is hosted as an asset of this project's GitHub
+release: https://github.com/gabx/linux-on-android/releases/tag/v1.0.
+`scripts/02b-pin-gdk-pixbuf.sh` downloads it automatically with
+SHA256 verification. The user no longer has any manual download step.
 
 ---
 
