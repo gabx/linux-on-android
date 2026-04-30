@@ -1,0 +1,38 @@
+name: Lint
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  bash-syntax:
+    name: Bash syntax check
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Run bash -n on all scripts
+        run: |
+          set -e
+          for f in scripts/**/*.sh scripts/*.sh; do
+            [ -f "$f" ] || continue
+            echo "Checking: $f"
+            bash -n "$f"
+          done
+
+  shellcheck:
+    name: ShellCheck (warnings only)
+    runs-on: ubuntu-latest
+    continue-on-error: true
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install shellcheck
+        run: sudo apt-get update && sudo apt-get install -y shellcheck
+      - name: Run shellcheck on all scripts
+        run: |
+          for f in scripts/**/*.sh scripts/*.sh; do
+            [ -f "$f" ] || continue
+            echo "=== $f ==="
+            shellcheck "$f" || true
+          done
