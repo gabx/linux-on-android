@@ -14,6 +14,16 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 # shellcheck source=lib/common.sh
 source "${SCRIPT_DIR}/lib/common.sh"
 
+# --- display profile ----------------------------------------------------------
+# phone = Pixel screen alone (high DPI); desktop = external monitor (default).
+PROFILE="${1:-desktop}"
+case "${PROFILE}" in
+    phone)   XFT_DPI=192 ;;
+    desktop) XFT_DPI=96  ;;
+    *) die "Usage: $(basename "$0") [phone|desktop]" ;;
+esac
+log_info "Display profile: ${PROFILE} (DPI ${XFT_DPI})"
+
 # --- guard --------------------------------------------------------------------
 
 detect_env
@@ -26,9 +36,9 @@ require_cmd termux-x11
 
 # --- verify prerequisites -----------------------------------------------------
 
-ARCH_ROOTFS="${PREFIX}/var/lib/proot-distro/installed-rootfs/archlinux"
+ARCH_ROOTFS="${PREFIX}/var/lib/proot-distro/containers/archlinux/rootfs"
 
-if [[ ! -f "${ARCH_ROOTFS}/etc/os-release" ]]; then
+if [[ ! -f "${ARCH_ROOTFS}/usr/lib/os-release" ]]; then
     die "Arch Linux rootfs not found. Run 01-install-arch.sh first."
 fi
 
@@ -101,10 +111,12 @@ log_info "Starting XFCE4 session. Close XFCE or press Ctrl+C to stop."
 # The heredoc marker is single-quoted (<<'GUEST_SCRIPT') so the host shell
 # passes the block verbatim to bash inside the guest. DISPLAY=:0 must be
 # exported inside the guest environment, not pre-expanded by the host shell.
-proot-distro login archlinux --shared-tmp -- bash <<'GUEST_SCRIPT'
+proot-distro login archlinux --shared-tmp -- env XFT_DPI="${XFT_DPI}" bash <<'GUEST_SCRIPT'
 set -euo pipefail
 
 export DISPLAY=:0
+
+printf 'Xft.dpi: %s\n' "${XFT_DPI}" | xrdb -merge 2>/dev/null || true
 
 # dbus-run-session starts a private D-Bus session bus, waits until the daemon
 # is ready, exports DBUS_SESSION_BUS_ADDRESS into the environment, then execs

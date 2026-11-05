@@ -25,7 +25,7 @@ require_cmd proot-distro
 
 # --- paths --------------------------------------------------------------------
 
-ARCH_ROOTFS="${PREFIX}/var/lib/proot-distro/installed-rootfs/archlinux"
+ARCH_ROOTFS="${PREFIX}/var/lib/proot-distro/containers/archlinux/rootfs"
 SENTINEL="${ARCH_ROOTFS}/var/lib/loa-gdk-pixbuf-pinned"
 PKG_FILENAME="gdk-pixbuf2-2.42.12-2-aarch64.pkg.tar.xz"
 PKG_FILE="${HOME}/${PKG_FILENAME}"

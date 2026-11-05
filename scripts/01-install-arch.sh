@@ -33,13 +33,13 @@ require_cmd proot-distro
 # Reasons:
 #   1. CLI output format (flags, text, ANSI codes) can change between
 #      proot-distro versions; a file path is a stable contract.
-#   2. We test /etc/os-release specifically, not just the directory: proot-distro
+#   2. We test /usr/lib/os-release specifically, not just the directory: proot-distro
 #      creates the rootfs directory before extraction begins, so the directory
 #      alone can exist in a half-installed state. os-release is written by the
 #      Arch tarball itself and is absent until extraction completes successfully.
-ARCH_ROOTFS="${PREFIX}/var/lib/proot-distro/installed-rootfs/archlinux"
+ARCH_ROOTFS="${PREFIX}/var/lib/proot-distro/containers/archlinux/rootfs"
 
-if [[ -f "${ARCH_ROOTFS}/etc/os-release" ]]; then
+if [[ -f "${ARCH_ROOTFS}/usr/lib/os-release" ]]; then
     log_info "Arch Linux rootfs is already installed. Nothing to do."
     exit 0
 fi
@@ -48,7 +48,12 @@ fi
 
 log_warn "Downloading Arch Linux ARM rootfs (~200 MB compressed). This will take several minutes on a slow connection."
 
-proot-distro install archlinux \
+proot-distro install menci/archlinuxarm --override-alias archlinux \
     || die "proot-distro install failed. Check disk space (~600 MB required) and network connectivity."
+
+# Disable pacman's sandbox (Landlock + alpm user) which proot cannot support.
+# MUST be inside [options]; appended at EOF it lands in the wrong section and
+# pacman ignores it, so the Landlock error returns on the first sync in 02.
+sed -i '/^\[options\]/a DisableSandbox' "${ARCH_ROOTFS}/etc/pacman.conf"
 
 log_info "Arch rootfs installed. Next: 02-arch-provision.sh"

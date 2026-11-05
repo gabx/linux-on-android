@@ -25,9 +25,9 @@ require_cmd proot-distro
 
 # --- verify Arch is installed -------------------------------------------------
 
-ARCH_ROOTFS="${PREFIX}/var/lib/proot-distro/installed-rootfs/archlinux"
+ARCH_ROOTFS="${PREFIX}/var/lib/proot-distro/containers/archlinux/rootfs"
 
-if [[ ! -f "${ARCH_ROOTFS}/etc/os-release" ]]; then
+if [[ ! -f "${ARCH_ROOTFS}/usr/lib/os-release" ]]; then
     die "Arch Linux rootfs not found. Run 01-install-arch.sh first."
 fi
 

@@ -25,9 +25,9 @@ require_cmd proot-distro
 
 # --- verify prerequisites -----------------------------------------------------
 
-ARCH_ROOTFS="${PREFIX}/var/lib/proot-distro/installed-rootfs/archlinux"
+ARCH_ROOTFS="${PREFIX}/var/lib/proot-distro/containers/archlinux/rootfs"
 
-if [[ ! -f "${ARCH_ROOTFS}/etc/os-release" ]]; then
+if [[ ! -f "${ARCH_ROOTFS}/usr/lib/os-release" ]]; then
     die "Arch Linux rootfs not found. Run 01-install-arch.sh first."
 fi
 
@@ -65,10 +65,10 @@ pacman -Syy
 # explicit entry ensures it stays installed rather than silently disappearing.
 # --noconfirm accepts the default choice for any optional dependency prompts
 # (e.g. polkit provider selection).
-if ! pacman -S --needed --noconfirm xfce4 xfce4-terminal; then
+if ! pacman -S --needed --noconfirm xfce4 xfce4-terminal xorg-xrdb; then
     echo ">>> First install attempt hit mirror desync. Re-syncing and retrying..."
     pacman -Syy
-    pacman -S --needed --noconfirm xfce4 xfce4-terminal
+    pacman -S --needed --noconfirm xfce4 xfce4-terminal xorg-xrdb
 fi
 
 mkdir -p /var/lib
